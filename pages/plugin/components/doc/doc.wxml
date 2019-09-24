@@ -1,0 +1,16 @@
+<view class="vhall-body tc" wx:if="{{docStatus==1}}">
+   <image 
+    style="background-image: url({{backgroundImageUrl}});"
+    binderror="errorShow"
+    class="image" 
+    mode="widthFix" 
+    lazy-load="true" 
+    src="{{imageUrl}}"/>
+    <canvas 
+      class='doc-canvas' 
+      width="{{playerRect.width}}"
+      style="background-color: {{showtype?'#fff':''}};"
+      canvas-id="{{canvasId}}"/>
+</view>
+<view>
+</view>

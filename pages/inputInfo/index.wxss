@@ -1,0 +1,28 @@
+.v-container{
+  height: 100vh;
+  overflow: hidden;
+  background-image: url('https://t-alistatic01.e.vhall.com/static/img/webinar.png');
+  opacity: 0.8;
+}
+.input-box{
+  color: #fff;
+  margin-top: 20%;
+}
+.v-input{
+  display: flex;
+  width: 80%;
+  margin: 20rpx auto;
+}
+.v-input text{
+  flex-basis:100px;
+}
+.v-input input{
+  flex: 1;
+  color: #ddd;
+  font-size: 14px;
+  border-bottom: solid 1rpx rgba(200,200,200,0.8);
+}
+.join-btn{
+  width: 80%;
+  margin-top: 20%;
+}

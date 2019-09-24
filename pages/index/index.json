@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "vhall": "../plugin/components/vhall/vhall",
+    "vhallDoc": "../plugin/components/doc/doc"
+  }
+}

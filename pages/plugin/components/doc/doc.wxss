@@ -1,0 +1,22 @@
+.vhall-body{
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+.tc{
+  margin-left:auto;
+  margin-right: auto;
+}
+.image{
+  width: 100%;
+  background-color: #eeeeee;
+  background-size: cover;
+  background-position: center center;
+}
+.doc-canvas{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:1000px;
+}

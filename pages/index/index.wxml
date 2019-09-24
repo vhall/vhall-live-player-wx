@@ -1,0 +1,58 @@
+<view>
+    <vhall
+        autoPlay="{{false}}"
+        bind:playSource="getPlaySource"
+        bind:fullScreenChange="screenChange"
+        bind:playWaiting="waiting"
+        bind:playTimeUpdate="playUpdate"
+        bind:errorMsg="errorFn"
+        bind:playStatus="playStatus"
+        bind:onMessage="onGetMessage">
+        <view slot="before" style='display:flex;margin:20rpx auto;'>
+            <button bindtap="bindPlay">播放</button>
+            <button bindtap="bindPause">暂停</button>
+            <button bindtap="bindSeekTo">seek30s</button>
+            <button bindtap="bindFullScreen">全屏</button>
+        </view>
+        <view slot="after" class="main" bindtap='closeChangeType'>
+            <label class="pd30 .tip">slot="after"的内容</label>
+            <view class='v-tool'>
+              <button catchtap="changeLineTypes">切线</button>
+              <button catchtap="changeQualiTypes">清晰度</button>
+              <view class="tool-item change-line {{showLine?'':'hide'}}">
+                <view class="{{playInfo.currentLineIndex==index?'active':''}}"
+                  wx:for="{{playInfo.sourceInfo.lineTypes}}"
+                  wx:key="*this"
+                  data-type="{{index}}"
+                  catchtap="selectLine">{{item}}</view>
+              </view>  
+              <view class="tool-item change-player {{showSource?'':'hide'}}">
+                <view class="{{playInfo.currentQuality==item?'active':''}}"
+                  wx:for="{{playInfo.sourceInfo.qualiTypes}}"
+                  wx:key="*this"
+                  data-type="{{item}}"
+                  catchtap="selectQualiTypes">{{definitionsKey[item]}}</view>
+              </view>  
+            </view>
+            <view class='menu'>
+              <view bindtap="selectMenu" data-type='doc' class="menu-item {{selectType=='doc'?'active':''}}">文档</view>
+              <view bindtap="selectMenu" data-type='other' class="menu-item {{selectType=='other'?'active':''}}">其他</view>
+            </view>
+            <view class="pd10 {{selectType=='other'?'':'hide'}}">
+              <view class="pd10 content">
+                  <label class="title">播放进度信息：</label>
+                  <textarea class="textarea" style="height: 30px;">{{timeMsg}}</textarea>
+              </view>
+              <view class="pd10 content">
+                  <label class="title">收到通知：</label>
+                  <textarea class="textarea">{{msg}}</textarea>
+              </view>
+            </view>
+            <view class="pd30 {{selectType=='doc'?'':'hide'}}">
+               <view id="docId">
+                  <vhallDoc bind:docStatus="changeDocStatus" docWidth='{{docWidth}}'/>
+               </view>
+            </view>
+        </view>
+    </vhall>
+</view>

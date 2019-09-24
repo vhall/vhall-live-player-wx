@@ -1,0 +1,53 @@
+<view class="vhall-body tc">
+   <slot name="before"></slot>
+   <view class="vhall-body-item" style="height:{{playerHeight}}px">
+         <live-player
+           id="{{liveId}}"
+           src="{{liveUrl}}"
+           style="width:100%;height:{{playerHeight}}px;"
+           class="{{playStatus==1?'':'hide'}}"
+           mode="live"
+           autoplay="{{true}}"
+           bindfullscreenchange="fullScreenChange"
+           bindstatechange="onStatus">
+             <cover-view wx:if="{{playStatus==1}}">
+              <cover-view class="vhall-cover {{defaultImgShow?'hide':''}}">
+                <cover-image class="img" src="{{vhallStatic.playDefaultImg}}"></cover-image>  
+                <!-- 
+                  真机cover-image中暂时不支持 animation 动画和 gif 动图
+                  <cover-view class="vhall-loading {{showLoading?'hide':''}}">
+                    <cover-image class="load-item" src="https://t-alistatic01.e.vhall.com/static/img/mobile/loadingin1.png"></cover-image>
+                    <cover-image class="load-item" src="https://t-alistatic01.e.vhall.com/static/img/mobile/loadingout1.png"></cover-image>
+                  </cover-view> 
+                -->
+               </cover-view>  
+              <slot name="cover-view"></slot>
+            </cover-view> 
+            <cover-view class="back {{fullScreen?'':'hide'}}" bindtap="bindExitFullScreen">＜</cover-view>
+        </live-player>
+          <video
+            id="{{videoId}}"
+            src="{{videoUrl}}"
+            style="width:100%;height:{{playerHeight}}px;"
+            class="{{playStatus==3?'':'hide'}}"
+            objectFit="fill"
+            bindfullscreenchange="fullScreenChange"
+            bindwaiting="playWaiting"
+            bindtimeupdate="playTimeUpdate"
+            bindplay="vodplay" 
+            bindpause="vodpause" 
+            bindended="vodEnd" 
+            binderror="vodError"
+            controls>
+            <cover-view wx:if="{{playStatus==3}}">
+              <cover-view class="vhall-cover {{defaultImgShow?'hide':''}}">
+                <cover-image class="img" src="{{vhallStatic.playDefaultImg}}"></cover-image>
+              </cover-view> 
+              <slot name="cover-view"></slot>
+            </cover-view>
+            <cover-view class="back {{fullScreen?'':'hide'}}" bindtap="bindExitFullScreen">＜</cover-view>
+          </video>  
+  </view> 
+  <slot name="after"></slot>
+  <!-- <textarea class="textarea">{{testMst}}</textarea> -->
+</view>

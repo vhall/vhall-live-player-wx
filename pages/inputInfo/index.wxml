@@ -1,0 +1,29 @@
+<view class="v-container">
+  <view class='input-box'>
+    <view class='v-input'>
+      <text>roomid</text>
+      <input value='{{roomid}}' placeholder="房间id" bindinput="inputRoom" />
+    </view>
+    <view class='v-input'>
+      <text>account</text>
+      <input value='{{account}}' placeholder="账号" bindinput="inputAccount" />
+    </view>
+    <view class='v-input'>
+      <text>username</text>
+      <input value='{{username}}' placeholder="用户名" bindinput="inputUserName" />
+    </view>
+    <view class='v-input'>
+      <text>app_key</text>
+      <input value='{{app_key}}' placeholder="app_key" bindinput="inputAppkey" />
+    </view>
+    <view class='v-input'>
+      <text>sign</text>
+      <input value='{{sign}}' placeholder="签名" bindinput="inputSign" />
+    </view>
+    <view class='v-input'>
+      <text>signedat</text>
+      <input value='{{signedat}}'  placeholder="签名时间" bindinput="inputSignedat" />
+    </view>
+  </view>
+  <button class='join-btn' type='primary' bindtap='joinLive'>观看</button>
+</view>
