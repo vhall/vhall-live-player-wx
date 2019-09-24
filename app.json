@@ -1,12 +1,13 @@
 {
-  "pages":[
+  "pages": [
     "pages/inputInfo/index",
     "pages/index/index"
   ],
-  "window":{
-    "backgroundTextStyle":"light",
+  "window": {
+    "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#334",
     "navigationBarTitleText": "选择",
-    "navigationBarTextStyle":"white"
-  }
+    "navigationBarTextStyle": "white"
+  },
+  "sitemapLocation": "sitemap.json"
 }

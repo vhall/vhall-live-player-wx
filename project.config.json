@@ -13,8 +13,10 @@
 	"compileType": "miniprogram",
 	"libVersion": "2.1.1",
 	"appid": "wx99dde530659f4680",
-	"projectname": "vhall-live-player",
+	"projectname": "vhall-live-player-wx",
 	"isGameTourist": false,
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,
