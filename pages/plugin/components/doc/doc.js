@@ -1,6 +1,4 @@
-import VhallMain from '../../sdk/vhallMain.js';
-import Event from '../../sdk/event.js';
-import DrawUtil from '../../sdk/drawUtil.js';
+import {Vhall} from '../../index.js';
 import { timeOut, noloading} from '../../api/config.js';
 
 Component({
@@ -30,8 +28,8 @@ Component({
     whiteBoardList:[]
   },
   properties: {
-    docWidth: { 
-      type: Number, 
+    docWidth: {
+      type: Number,
       value: 375
     }
   },
@@ -52,7 +50,7 @@ Component({
   ready: function () {
     this.cxt = wx.createCanvasContext(this.data.canvasId, this);
     let _this = this;
-    Event.trigger('finishDoc', {
+    Vhall.Event.trigger('finishDoc', {
       success: function (doc) {
         _this.setData({
           docStatus: doc.show
@@ -92,10 +90,10 @@ Component({
             playStatus: 3,
             backgroundImageUrl: noloading
           });
-        }  
+        }
       }
     });
-    VhallMain.on('flashMsgDoc', (msg) => {
+    Vhall.VhallMain.on('flashMsgDoc', (msg) => {
       if (this.data.playStatus == 1) {
         let st = setTimeout(() => {
           clearTimeout(st);
@@ -116,23 +114,23 @@ Component({
           this.data.msgList.push(msg.data);
         }
         this.drawCanvas(msg.data);
-      } else if (msg.type == 'doc_delAll' || msg.type == "board_delAll") { //清空画布 
+      } else if (msg.type == 'doc_delAll' || msg.type == "board_delAll") { //清空画布
         this.eraserCanvas();
-      } else if (msg.type == 'doc_del') { //橡皮擦 
-        this.eraserCanvas(msg.data.id);  
-      } else if (msg.type == 'flipOver') { //翻页 
+      } else if (msg.type == 'doc_del') { //橡皮擦
+        this.eraserCanvas(msg.data.id);
+      } else if (msg.type == 'flipOver') { //翻页
         this.setData({
           tempImageUrl: 'https:' + this.data.doc.srv + '/' + msg.doc + '/' + msg.page + '.jpg',
           imageUrl: 'https:' + this.data.doc.srv + '/' + msg.doc + '/' + msg.page + '.jpg'
         });
         this.renewDraw();
-      } else if (msg.type == 'change_showtype'){ //改变展示状态 
+      } else if (msg.type == 'change_showtype'){ //改变展示状态
         if (msg.showType==0){ //关闭白板
           this.setData({
             showtype:false,
             imageUrl: this.data.tempImageUrl
           });
-          
+
         } else if (msg.showType == 1) {//开启白板
           this.setData({
             showtype: true,
@@ -157,11 +155,11 @@ Component({
           this.renewDraw();
         }
       }else if (msg.type == 'board_init') { //初始化画板
-        
-      } 
+
+      }
     },
     renewDraw(){ //重新绘制
-      DrawUtil.clearDraw(this.cxt, [0, 0, this.data.docWidth, 1000]);
+      Vhall.DrawUtil.clearDraw(this.cxt, [0, 0, this.data.docWidth, 1000]);
       let drawDataList = [];
       if (this.data.showtype == 0) { //关闭白板
         drawDataList = this.data.msgList;
@@ -190,7 +188,7 @@ Component({
             }
           }else{
             temMsgList.push(item);
-          } 
+          }
         } else if (item.matchType !== this.data.imageUrl) { /* 清空当前画板 */
           temMsgList.push(item);
         }
@@ -201,7 +199,7 @@ Component({
         this.data.whiteBoardList = temMsgList;
       }
       this.renewDraw();
-    }, 
+    },
     drawCanvas(data){
       this.setData({
         lineWidth: (data.lineSize ? data.lineSize:this.data.lineWidth)
@@ -215,22 +213,22 @@ Component({
       let ratio = (data.ratio ? data.ratio : this.data.docWidth / 1024);
       data.ratio = ratio;
       if (data.type == 1) { //画线
-        DrawUtil.drawLine(this.cxt, {
+        Vhall.DrawUtil.drawLine(this.cxt, {
           color: data.color,
           lineWidth: data.lineWidth,
           data: data.points,
           ratio: ratio
         });
       } else if (data.type == 20 || data.type == 21) { //画圆
-        DrawUtil.drawEllipse(this.cxt, data);
+          Vhall.DrawUtil.drawEllipse(this.cxt, data);
       } else if (data.type == 22) { //矩形
-        DrawUtil.drawRect(this.cxt, data);
+          Vhall.DrawUtil.drawRect(this.cxt, data);
       } else if (data.type == 4) { //写字
-        DrawUtil.drawText(this.cxt, data);
+          Vhall.DrawUtil.drawText(this.cxt, data);
       } else if (data.type == 31 || data.type == 30) { //画箭头线
-        DrawUtil.drawArrow(this.cxt, data);
+          Vhall.DrawUtil.drawArrow(this.cxt, data);
       } else if (data.type == 7) { //画锚点
-        DrawUtil.drawAnchor(this.cxt, data);
+          Vhall.DrawUtil.drawAnchor(this.cxt, data);
       }
     },
     errorShow(e){

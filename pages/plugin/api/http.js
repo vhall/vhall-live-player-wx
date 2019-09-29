@@ -1,4 +1,4 @@
-import Config from 'config.js';
+import * as Config from './config.js';
 
 function get(url,data,configKey){
   let VALL_URL = Config[configKey] || Config['vhall'];
@@ -43,7 +43,7 @@ function post(url, data, configKey) {
   })
 }
 
-module.exports = {
+export default {
   reqGet: get,
   reqPost: post
 }

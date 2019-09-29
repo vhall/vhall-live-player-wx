@@ -1,9 +1,5 @@
-import VhallMain from '../../sdk/vhallMain.js';
-import Socket from '../../sdk/socket.js';
+import {Vhall} from '../../index.js';
 import { EVENTE, Error, timeOut, videoDefault, pushLogUrl} from '../../api/config.js';
-import videoJs from '../../sdk/video.js';
-import DocHelp from './docHelp';
-let count = 0;
 Component({
     options: {
         multipleSlots: true
@@ -32,7 +28,7 @@ Component({
         autoPlay: Boolean
     },
     attached: function(){
-      VhallMain.on('finishDoc', (docMsg) => {
+      Vhall.VhallMain.on('finishDoc', (docMsg) => {
         this.setInitDocOption = docMsg.success;
       });
       let _this = this;
@@ -48,23 +44,23 @@ Component({
           });
         }
       });
-      VhallMain.on('initVhall', (options) => {
+      Vhall.VhallMain.on('initVhall', (options) => {
         this.setData({
           options: options
         });
         this.initVhall();
       });
-      VhallMain.on('error', (msg) => {
+      Vhall.VhallMain.on('error', (msg) => {
           this.triggerEvent("errorMsg", msg);
       });
     },
     detached: function () { //组件生命周期函数，在组件实例被从页面节点树移除时执行
-      VhallMain.removeAll();
+      Vhall.VhallMain.removeAll();
       if (this.data.playStatus != 1) return;
       this.socket.disconnect();
     },
     ready: function () {
-        VhallMain.on('control', (type, val) => {
+        Vhall.VhallMain.on('control', (type, val) => {
             switch (type) {
                 case EVENTE.EVENT_PLAY:
                     this.bindPlay(); //播放
@@ -80,7 +76,7 @@ Component({
                     break;
                 case EVENTE.EVENT_EXIT_FULLSCREEN:
                     this.bindExitFullScreen(); //退出全屏
-                    break;    
+                    break;
                 case EVENTE.EVENT_AWAKE:
                     this.awakeVhall(); //唤醒
                     break;
@@ -96,7 +92,7 @@ Component({
             title: '加载中',
           });
           let options = this.data.options;
-          VhallMain.init(options).then((res) => { 
+          Vhall.VhallMain.init(options).then((res) => {
             if (res.data.code != 200) {
               if (res.data.code==1001){
                 this.triggerEvent("errorMsg", {
@@ -123,8 +119,8 @@ Component({
                 msg: '直播'
               });
               //初始化socket服务
-              if(!this.socket){ 
-                this.socket = Socket.init(res.data.data);
+              if(!this.socket){
+                this.socket = Vhall.Socket.init(res.data.data);
               } else if (this.socket && !this.socket.connect){
                 this.socket.open();
               }
@@ -152,18 +148,18 @@ Component({
               }
               let docUrl = res.data.data.mobilePlayer.msgUrl;
               if(docUrl){
-                VhallMain.getDocs(docUrl).then((docsData) => {
-                  this.docArry = DocHelp.formartDocs(docsData.data);
+                Vhall.VhallMain.getDocs(docUrl).then((docsData) => {
+                  this.docArry = Vhall.DocHelp.formartDocs(docsData.data);
                 });
               }else{
-                console.log('没有文档信息'); 
+                console.log('没有文档信息');
               }
             }
             this.initLivePlayer(options,res.data.data);
-            VhallMain.on('online', (msg) => {
+            Vhall.VhallMain.on('online', (msg) => {
                 this.onOnlineMessage(msg);
             });
-            VhallMain.on('cmdMsg', (msg) => {
+            Vhall.VhallMain.on('cmdMsg', (msg) => {
                 this.onCmdMessage(msg);
             });
             if (this.setInitDocOption){
@@ -199,7 +195,7 @@ Component({
               }
               uri = uri.replace(/(.+\.com)/, '');
             }
-            this.player = new videoJs({
+            this.player = new Vhall.VideoJs({
                 id_: _id,
                 wx: wx,
                 player: this.vHallcontext,
@@ -258,12 +254,12 @@ Component({
             console.log('--收到online消息--');
             console.log(data);
         },
-        changeSource(msg){ 
+        changeSource(msg){
           if (msg.currentQuality && msg.currentQuality != this.player.currentClearStatus){//切清晰度
-            this.switchQualityLevel(msg.currentQuality);  
+            this.switchQualityLevel(msg.currentQuality);
           } else if (msg.currentLineIndex != this.player.subSrcIndex){ //切线
             this.player.subSrcIndex = (msg.currentLineIndex ? msg.currentLineIndex : 0);
-            this.player.switchSrc(); 
+            this.player.switchSrc();
           }
         },
         switchQualityLevel(key){
@@ -311,7 +307,7 @@ Component({
             this.setData({
               currentQuality: this.player.currentClearStatus,
               currentLineIndex: this.player.subSrcIndex
-            });  
+            });
             this.triggerEvent("playSource", {
               sourceInfo: {
                 lineTypes: ['线路1', '线路2'],
@@ -357,7 +353,7 @@ Component({
         },
         playTimeUpdate: function(e){
           if (this.docArry && this.docArry.length>0){
-            DocHelp.sendDocMsg(this.docArry, e.detail.currentTime);
+            Vhall.DocHelp.sendDocMsg(this.docArry, e.detail.currentTime);
           }
           this.triggerEvent("playTimeUpdate",e.detail);
         },
