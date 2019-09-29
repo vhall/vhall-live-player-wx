@@ -2073,4 +2073,4 @@ var n=r(23),o=r(22),i=r(21);function s(){return u.TYPED_ARRAY_SUPPORT?2147483647
 
 /******/ });
 });
-//# sourceMappingURL=index.min.js.map
+//# sourceMappingURL=sdk.js.map
