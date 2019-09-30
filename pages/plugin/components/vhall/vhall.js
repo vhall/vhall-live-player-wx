@@ -83,6 +83,9 @@ Component({
                 case EVENTE.EVENT_CHANGESOURCE:
                     this.changeSource(val); // 切线，换源
                     break;
+                case EVENTE.EVENT_BACKRATE:
+                    this.setPlayBackRate(val); // 设置倍速播放
+                    break;
             }
         });
     },
@@ -199,6 +202,7 @@ Component({
                 id_: _id,
                 wx: wx,
                 player: this.vHallcontext,
+                playerType: data.player,
                 livePlayerKey: livePlayerKey,
                 type_: playerType,//默认flv
                 baseMode: baseMode,
@@ -209,7 +213,10 @@ Component({
                 arguments: {
                   aid: options.roomid,//roomId
                   uid: data.visitor.id,//第三方用户ID
-                  bu: 1
+                  bu: 1,
+                  paas_bu: data.paas_bu,
+                  paas_room_id:data.paas_room_id,
+                  paas_uid:data.paas_uid
                 }
             }, this);
             if(this.data.autoPlay){
@@ -253,6 +260,9 @@ Component({
         onOnlineMessage: function(data){
             console.log('--收到online消息--');
             console.log(data);
+        },
+        setPlayBackRate (val) {
+            this.vHallcontext.playbackRate(val)
         },
         changeSource(msg){
           if (msg.currentQuality && msg.currentQuality != this.player.currentClearStatus){//切清晰度

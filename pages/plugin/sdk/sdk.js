@@ -119,7 +119,8 @@ const V_EVENTE = {
   EVENT_FULLSCREEN: 'fullScreen',
   EVENT_EXIT_FULLSCREEN:'exitFullScreen',
   EVENT_AWAKE: 'awakeUp',
-  EVENT_CHANGESOURCE: 'changeSource'
+  EVENT_CHANGESOURCE: 'changeSource',
+  EVENT_BACKRATE: 'playbackRate'
 };
 
 const ErrorCode ={
@@ -147,110 +148,11 @@ const ErrorCode ={
 };
 const EVENTE = V_EVENTE;
 const Error = ErrorCode;
-const timeOut = 13000;
+const timeOut = 10000;
 const vhall = 'https://t.e.vhall.com/'; /* 接口地址 */
 const pushLogUrl = 'https://la.e.vhall.com/login'; /* 日志上报地址 */
 const videoDefault = 'https://cnstatic01.e.vhall.com/static/img/v35-webinar.png'; /* 播放占位图片 */
 const noloading = 'https://cnstatic01.e.vhall.com/static/img/mobile/doc_noloading.png'; /* 文档占位图片 */
-
-
-/***/ }),
-
-/***/ "./pages/plugin/api/http.js":
-/*!**********************************!*\
-  !*** ./pages/plugin/api/http.js ***!
-  \**********************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _config_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./config.js */ "./pages/plugin/api/config.js");
-
-
-function get(url,data,configKey){
-  let VALL_URL = _config_js__WEBPACK_IMPORTED_MODULE_0__[configKey] || _config_js__WEBPACK_IMPORTED_MODULE_0__["vhall"];
-  VALL_URL = VALL_URL + url;
-  if(url.indexOf('https://')!=-1){
-    VALL_URL = url;
-  }
-  return new Promise(function (resolve, reject) {
-    wx.request({
-      url: VALL_URL+'?_='+new Date().getTime(),
-      data: data,
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      success: function (res) {
-        resolve(res)
-      },
-      fail: function(error){
-        reject(error);
-      }
-    });
-  })
-}
-
-function post(url, data, configKey) {
-  let VALL_URL = _config_js__WEBPACK_IMPORTED_MODULE_0__[configKey]||_config_js__WEBPACK_IMPORTED_MODULE_0__["vhall"];
-  return new Promise(function (resolve, reject) {
-    wx.request({
-      url: VALL_URL + url,
-      data: data,
-      method:'POST',
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      success: function (res) {
-        resolve(res)
-      },
-      fail: function (error) {
-        reject(error);
-      }
-    });
-  })
-}
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  reqGet: get,
-  reqPost: post
-});
-
-
-/***/ }),
-
-/***/ "./pages/plugin/api/login.js":
-/*!***********************************!*\
-  !*** ./pages/plugin/api/login.js ***!
-  \***********************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _http_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./http.js */ "./pages/plugin/api/http.js");
-
-
-function login(options) {
-  var _pars = {
-    roomid: options.roomid,
-    account: options.account,
-    username: options.username,
-    app_key: options.app_key,
-    signedat: options.signedat,
-    sign: options.sign
-  };
-  return _http_js__WEBPACK_IMPORTED_MODULE_0__["default"].reqGet("api/miniprogram/v1/webinar/init", _pars);
-}
-
-function getDocs(url) {
-  return _http_js__WEBPACK_IMPORTED_MODULE_0__["default"].reqGet('https:'+url);
-}
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  login: login,
-  getDocs: getDocs
-});
 
 
 /***/ }),
@@ -309,19 +211,13 @@ function formartDocs(data){
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-const colors = {
-  c14090412: 'rgba(215,0,172,.8)',
-  c26584: 'rgba(0,103,216,.8)',
-  c50973: 'rgba(0,199,29,.8)',
-  c16762624: 'rgba(255,199,0,.8)',
-  c16646400: 'rgba(254,1,0,.8)',
-  c0: 'rgba(0,0,0,.8)',
-  cf: 'rgba(0,0,0,0)'
-};
 let lineWidth = 4;
+function countColor(color) {
+    return '#'+ color.toString(16).padStart(6, '0')
+}
 /* 画线 */
 function drawLine(cxt,option) {
-  cxt.setStrokeStyle(colors['c'+option.color]);
+  cxt.setStrokeStyle(countColor(option.color));
   cxt.setLineWidth(option.lineWidth * option.ratio);
   cxt.setLineCap('round');
   cxt.moveTo(option.data[0][0] * option.ratio, option.data[0][1] * option.ratio);
@@ -351,7 +247,7 @@ function drawEllipse(cxt, option) {
   sy = op.sPoint[1] * op.ratio + yr;
   let r = (xr + yr)/2;
   cxt.arc(sx, sy, r, 0, 2 * Math.PI, true);
-  cxt.setStrokeStyle(colors['c' + option.color]);
+  cxt.setStrokeStyle(countColor(option.color));
   cxt.setLineWidth(option.lineWidth * option.ratio);
   cxt.stroke();
   cxt.draw(true);
@@ -360,7 +256,7 @@ function drawEllipse(cxt, option) {
 /* 画矩形 */
 function drawRect(cxt, data) {
   var op = data;
-  cxt.setStrokeStyle(colors['c' + op.color]);
+  cxt.setStrokeStyle(countColor(op.color));
   cxt.setLineWidth(data.lineWidth * op.ratio);
   cxt.strokeRect(op.sPoint[0] * op.ratio, op.sPoint[1] * op.ratio, (op.tPoint[0] - op.sPoint[0]) * op.ratio, (op.tPoint[1] - op.sPoint[1]) * op.ratio);
   cxt.draw(true);
@@ -379,7 +275,7 @@ function drawText(cxt, data) {
   fontStyle += op.fs * op.ratio + "px 'Microsoft YaHei'";
   cxt.font = fontStyle;
   cxt.setFontSize(op.fs);
-  cxt.setFillStyle(colors['c' + op.color]);
+  cxt.setFillStyle(countColor(op.color));
   cxt.fillText(unescape(op.ft), op.sPoint[0]*op.ratio, op.sPoint[1]*op.ratio);
   cxt.draw(true);
 }
@@ -394,7 +290,7 @@ function drawArrow(cxt, data) {
   var toY = op.tPoint[1] * data.ratio;
   var theta = 30,
     headlen = 5,
-    color = colors['c' + op.color],
+    color = countColor(op.color),
     angle = Math.atan2(fromY - toY, fromX - toX) * 180 / Math.PI,
     angle1 = (angle + theta) * Math.PI / 180,
     angle2 = (angle - theta) * Math.PI / 180,
@@ -439,8 +335,8 @@ function drawAnchor(cxt, data) {
   var ctx = cxt;
   var op = data;
   var r = 10 * op.ratio;
-  ctx.fillStyle = colors['c' + op.color];
-  ctx.setFillStyle(colors['c' + op.color]);
+  ctx.fillStyle = countColor(op.color);
+  ctx.setFillStyle(countColor(op.color));
   var sx = op.sPoint[0] * op.ratio;
   var sy = op.sPoint[1] * op.ratio
   ctx.beginPath();
@@ -453,7 +349,7 @@ function drawAnchor(cxt, data) {
   ctx.lineTo(sx + r, sy + r * 3);
   ctx.closePath();
   ctx.fill();
-  ctx.setFillStyle(colors['cf']);
+  ctx.setFillStyle('rgba(0,0,0,0)');
   ctx.beginPath();
   ctx.arc(sx + r, sy + r, r * 0.55, 0, 2 * Math.PI);
   ctx.closePath();
@@ -554,6 +450,69 @@ var removeAll = function() {
 
 /***/ }),
 
+/***/ "./pages/plugin/sdk/http.js":
+/*!**********************************!*\
+  !*** ./pages/plugin/sdk/http.js ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _api_config_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../api/config.js */ "./pages/plugin/api/config.js");
+
+
+function get(url,data,configKey){
+  let VALL_URL = _api_config_js__WEBPACK_IMPORTED_MODULE_0__[configKey] || _api_config_js__WEBPACK_IMPORTED_MODULE_0__["vhall"];
+  VALL_URL = VALL_URL + url;
+  if(url.indexOf('https://')!=-1){
+    VALL_URL = url;
+  }
+  return new Promise(function (resolve, reject) {
+    wx.request({
+      url: VALL_URL+'?_='+new Date().getTime(),
+      data: data,
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success: function (res) {
+        resolve(res)
+      },
+      fail: function(error){
+        reject(error);
+      }
+    });
+  })
+}
+
+function post(url, data, configKey) {
+  let VALL_URL = _api_config_js__WEBPACK_IMPORTED_MODULE_0__[configKey]||_api_config_js__WEBPACK_IMPORTED_MODULE_0__["vhall"];
+  return new Promise(function (resolve, reject) {
+    wx.request({
+      url: VALL_URL + url,
+      data: data,
+      method:'POST',
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success: function (res) {
+        resolve(res)
+      },
+      fail: function (error) {
+        reject(error);
+      }
+    });
+  })
+}
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  reqGet: get,
+  reqPost: post
+});
+
+
+/***/ }),
+
 /***/ "./pages/plugin/sdk/index.js":
 /*!***********************************!*\
   !*** ./pages/plugin/sdk/index.js ***!
@@ -595,9 +554,47 @@ const Vhall = {
     fullScreen: _player_js__WEBPACK_IMPORTED_MODULE_0__["default"].fullScreen,
     exitFullScreen: _player_js__WEBPACK_IMPORTED_MODULE_0__["default"].exitFullScreen,
     changePlaySource: _player_js__WEBPACK_IMPORTED_MODULE_0__["default"].changePlay,
+    playbackRate: _player_js__WEBPACK_IMPORTED_MODULE_0__["default"].playbackRate,
+    getPlaybackRate: _player_js__WEBPACK_IMPORTED_MODULE_0__["default"].getPlaybackRate,
     setOptions: function (options) {
         _event__WEBPACK_IMPORTED_MODULE_1__["default"].trigger('initVhall',options);
     }
+});
+
+
+/***/ }),
+
+/***/ "./pages/plugin/sdk/login.js":
+/*!***********************************!*\
+  !*** ./pages/plugin/sdk/login.js ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _http_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./http.js */ "./pages/plugin/sdk/http.js");
+
+
+function login(options) {
+  var _pars = {
+    roomid: options.roomid,
+    account: options.account,
+    username: options.username,
+    app_key: options.app_key,
+    signedat: options.signedat,
+    sign: options.sign
+  };
+  return _http_js__WEBPACK_IMPORTED_MODULE_0__["default"].reqGet("api/miniprogram/v1/webinar/init", _pars);
+}
+
+function getDocs(url) {
+  return _http_js__WEBPACK_IMPORTED_MODULE_0__["default"].reqGet('https:'+url);
+}
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  login: login,
+  getDocs: getDocs
 });
 
 
@@ -650,13 +647,19 @@ function changePlay(msg){
     _event_js__WEBPACK_IMPORTED_MODULE_0__["default"].trigger("control", _api_config_js__WEBPACK_IMPORTED_MODULE_1__["EVENTE"].EVENT_CHANGESOURCE, msg);
 }
 
+function playbackRate(msg){
+    _event_js__WEBPACK_IMPORTED_MODULE_0__["default"].trigger("control", _api_config_js__WEBPACK_IMPORTED_MODULE_1__["EVENTE"].EVENT_BACKRATE, msg);
+}
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   play: play,
   pause: pause,
   seek: seek,
   fullScreen: fullScreen,
   exitFullScreen: exitFullScreen,
-  changePlay: changePlay
+  changePlay: changePlay,
+  playbackRate: playbackRate,
+  getPlaybackRate: [0.5, 0.8, 1.0, 1.25, 1.5, 2]
 });
 
 
@@ -880,7 +883,7 @@ const io = __webpack_require__(/*! ./weapp.socket.io.js */ "./pages/plugin/sdk/w
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _event_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./event.js */ "./pages/plugin/sdk/event.js");
-/* harmony import */ var _api_login_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../api/login.js */ "./pages/plugin/api/login.js");
+/* harmony import */ var _login_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./login.js */ "./pages/plugin/sdk/login.js");
 /* harmony import */ var _api_config_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../api/config.js */ "./pages/plugin/api/config.js");
 /**
  * sdk 统一入口
@@ -914,11 +917,11 @@ function init(option) {
     signedat: option.signedat,
     sign: option.sign
   };
-  return _api_login_js__WEBPACK_IMPORTED_MODULE_1__["default"].login(options);
+  return _login_js__WEBPACK_IMPORTED_MODULE_1__["default"].login(options);
 }
 
 function getDocs(url) {
-  return _api_login_js__WEBPACK_IMPORTED_MODULE_1__["default"].getDocs(url);
+  return _login_js__WEBPACK_IMPORTED_MODULE_1__["default"].getDocs(url);
 }
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -943,7 +946,6 @@ var utils = __webpack_require__(/*! ./public_func */ "./pages/plugin/sdk/public_
 
 
 function WxVideo(json, context) {
-
   this.defaultJson = {
     wx: null,  // 微信 obj
     livePlayerKey: '',  // liveplayer 动态更换src的变量key
@@ -990,6 +992,10 @@ function WxVideo(json, context) {
       flow_type: 2,  // 上行或是下行流量  int   1代表上行流量，2代表下行流量，0代表默认值
       biz_id: '-', // 业务id  varchar   业务id，'-'代表默认值
       biz_des01: 0, // 业务属性 int   业务属性，1代表小班课，2代表大班课，如果不关注业务属性请设为0
+      playerType: '',
+      paas_bu: '',
+      paas_room_id: '',
+      paas_uid: ''
     }
   };  // this.defaultJson finish;
 
@@ -1004,7 +1010,6 @@ function WxVideo(json, context) {
       this.defaultJson[attr] = json[attr];
     }
   };
-
   if (!this.defaultJson.id_) {
     console.log('need dom id');
     return;
@@ -1090,7 +1095,7 @@ WxVideo.prototype.updateLivePlayerSrc = function (value) {
 };
 
 WxVideo.prototype.sleep = function (milliSeconds) {
-  var startTime = new Date().getTime(); // get the current time    
+  var startTime = new Date().getTime(); // get the current time
   while (new Date().getTime() < startTime + milliSeconds);
 };
 
@@ -1747,7 +1752,6 @@ WxVideo.prototype.checkToken = function () {
 
 // 初始化直接调用即可 参数可以为空 {} 后期验证token过期，通过当前清晰度 获取完新的资源后通过callback去拿到新的资源
 WxVideo.prototype.fetchSrc = function (json) {
-
   if (!this.defaultJson.useApi) return;  // 关闭使用api则不进行
   var args = this.defaultJson.arguments;
 
@@ -1761,13 +1765,14 @@ WxVideo.prototype.fetchSrc = function (json) {
   };
 
   var wx = this.defaultJson.wx;
-
   if (this.defaultJson.baseMode == 'live') {
     var url = this.defaultJson.dispatchDomain + '/api/dispatch_play?webinar_id=' + args.aid + '&rand=' + args.rand + '&uid=' + args.uid + '&bu=' + args.bu;
+    if (this.defaultJson.playerType === 2) { // H5播放器
+        url = this.defaultJson.dispatchDomain + '/api/dispatch_play?webinar_id=' + args.paas_room_id + '&rand=' + args.rand + '&uid=' + args.paas_uid + '&bu=' + args.paas_bu;
+    }
   } else {
     var url = this.defaultJson.dispatchDomain + '/api/dispatch_replay?webinar_id=' + args.aid + '&rand=' + args.rand + '&uid=' + args.uid + '&bu=' + args.bu + '&quality=' + JSON.stringify(this.defaultJson.vodQuality) + '&uri=' + this.defaultJson.uri;
   }
-
   // url = 'https://t-mss.e.vhall.com/api/dispatch_replay?webinar_id=9320432d&rand=881&uid=9320432d_vhallyun_412715&uri=/vhallyun/vhallrecord/lss_0bc36d14/20180426141728_a694eb45/record.m3u8&bu=1&quality=[]'
   console.log(url)
 

@@ -24,7 +24,7 @@
   height: 32px;
   margin-left: -16px;
   margin-top: -16px;
-  animation: vhallLoading 1s infinite linear; 
+  animation: vhallLoading 1s infinite linear;
 }
  .vhall-cover .vhall-loading .load-item:nth-child(1){
   animation: vhallLoading1 1s infinite linear;
@@ -49,7 +49,7 @@
   to {
     transform:rotate(0);
   }
-} 
+}
 .vhall-body .hide{
   display: none;
 }
@@ -87,7 +87,7 @@
   margin: 5rpx;
 }
 .back{
-  display: inline-block;   
+  display: inline-block;
   position: absolute;
   top: 20rpx;
   left: 20rpx;
@@ -95,8 +95,8 @@
   height: 50rpx;
   line-height: 50rpx;
   font-size: 40rpx;
-  color: #ccc;
-  opacity: .8;
+  color: #333;
+  opacity: .4;
   z-index: 99999999;
 }
 .textarea{

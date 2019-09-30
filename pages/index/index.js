@@ -8,10 +8,12 @@ Page({
       '360p': '标清',
       'a': '纯音频'
     },
+    showPlayRate: true,
+    playRateList: [],
     msg: '',
     timeMsg: '',
     currentTime: '0',
-    screenStatus: '', 
+    screenStatus: '',
     showSource:false,
     showLine:false,
     options: {
@@ -22,7 +24,7 @@ Page({
       signedat: '',
       sign: ''
     },
-    selectType: 'other',
+    selectType: 'doc',
     videoUrl:'',
     showTool: false,
     docWidth: 375,
@@ -56,6 +58,18 @@ Page({
       showLine: !this.data.showLine,
       showSource: false
     });
+  },
+  changePlayRate(){
+      this.setData({
+          playRateList: myPlugin.playbackRateList,
+          showPlayRate: true
+      });
+  },
+  selectPlayRate(e){
+      this.setData({
+          showPlayRate: false
+      });
+      myPlugin.setPlaybackRate(e.target.dataset.type);
   },
   selectQualiTypes(e){
     let playInfo = this.data.playInfo;

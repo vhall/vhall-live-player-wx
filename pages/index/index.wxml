@@ -17,22 +17,29 @@
         <view slot="after" class="main" bindtap='closeChangeType'>
             <label class="pd30 .tip">slot="after"的内容</label>
             <view class='v-tool'>
-              <button catchtap="changeLineTypes">切线</button>
+              <button catchtap="changePlayRate">倍速</button>
+              <!--<button catchtap="changeLineTypes">切线</button>-->
               <button catchtap="changeQualiTypes">清晰度</button>
-              <view class="tool-item change-line {{showLine?'':'hide'}}">
-                <view class="{{playInfo.currentLineIndex==index?'active':''}}"
-                  wx:for="{{playInfo.sourceInfo.lineTypes}}"
-                  wx:key="*this"
-                  data-type="{{index}}"
-                  catchtap="selectLine">{{item}}</view>
-              </view>  
+              <!--<view class="tool-item change-line {{showLine?'':'hide'}}">-->
+                <!--<view class="{{playInfo.currentLineIndex==index?'active':''}}"-->
+                  <!--wx:for="{{playInfo.sourceInfo.lineTypes}}"-->
+                  <!--wx:key="*this"-->
+                  <!--data-type="{{index}}"-->
+                  <!--catchtap="selectLine">{{item}}</view>-->
+              <!--</view>-->
               <view class="tool-item change-player {{showSource?'':'hide'}}">
                 <view class="{{playInfo.currentQuality==item?'active':''}}"
                   wx:for="{{playInfo.sourceInfo.qualiTypes}}"
                   wx:key="*this"
                   data-type="{{item}}"
                   catchtap="selectQualiTypes">{{definitionsKey[item]}}</view>
-              </view>  
+              </view>
+                <view class="tool-item change-rater {{showPlayRate?'':'hide'}}">
+                    <view wx:for="{{playRateList}}"
+                          wx:key="*this"
+                          data-type="{{item}}"
+                          catchtap="selectPlayRate">{{item}}倍</view>
+                </view>
             </view>
             <view class='menu'>
               <view bindtap="selectMenu" data-type='doc' class="menu-item {{selectType=='doc'?'active':''}}">文档</view>

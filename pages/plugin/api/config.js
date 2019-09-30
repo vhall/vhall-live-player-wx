@@ -5,7 +5,8 @@ const V_EVENTE = {
   EVENT_FULLSCREEN: 'fullScreen',
   EVENT_EXIT_FULLSCREEN:'exitFullScreen',
   EVENT_AWAKE: 'awakeUp',
-  EVENT_CHANGESOURCE: 'changeSource'
+  EVENT_CHANGESOURCE: 'changeSource',
+  EVENT_BACKRATE: 'playbackRate'
 };
 
 const ErrorCode ={
@@ -33,7 +34,7 @@ const ErrorCode ={
 };
 export const EVENTE = V_EVENTE;
 export const Error = ErrorCode;
-export const timeOut = 13000;
+export const timeOut = 10000;
 export const vhall = 'https://t.e.vhall.com/'; /* 接口地址 */
 export const pushLogUrl = 'https://la.e.vhall.com/login'; /* 日志上报地址 */
 export const videoDefault = 'https://cnstatic01.e.vhall.com/static/img/v35-webinar.png'; /* 播放占位图片 */

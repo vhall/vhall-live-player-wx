@@ -86,7 +86,7 @@
   position: absolute;
   right: 0;
   top: 5rpx;
-  width: 40%;
+  width: 57%;
   height: 30px;
   line-height: 30px;
   margin-bottom: 20rpx;
@@ -121,6 +121,9 @@
 }
 .change-player{
   left: 146rpx;
+}
+.change-rater{
+  left: 10rpx
 }
 .tool-item .active{
   color: greenyellow;
