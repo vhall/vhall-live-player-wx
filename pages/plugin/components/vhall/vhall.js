@@ -262,7 +262,7 @@ Component({
             console.log(data);
         },
         setPlayBackRate (val) {
-            this.vHallcontext.playbackRate(val)
+            if (this.vHallcontext.playbackRate) this.vHallcontext.playbackRate(val)
         },
         changeSource(msg){
           if (msg.currentQuality && msg.currentQuality != this.player.currentClearStatus){//切清晰度
