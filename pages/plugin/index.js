@@ -1,4 +1,4 @@
-const Sdk = require('./sdk/sdk.js')
+const Sdk = require('./sdk/sdk.min.js')
 export const Vhall = {
     Event: Sdk.Vhall.Event,
     Player: Sdk.Vhall.Player,
